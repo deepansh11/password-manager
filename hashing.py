@@ -1,10 +1,8 @@
-import scrypt,secrets
+import secrets
+from passlib.hash import argon2
 
-class Hash:
-    def __init__(self, password):
-        self.password = password
+def hash_argon2(password):
+	salt = secrets.token_bytes(32)
+	hash = argon2.using(salt= salt, rounds=8, memory_cost=2048, parallelism=2, type='id', max_threads=16, relaxed=False).hash(password)
 
-    def hashFunc(self):
-        salt = secrets.token_bytes(32)
-        scrypt_key = scrypt.hash(self.password,salt,N=2048,r=8,p=1)
-        print("Class works, key: ",scrypt_key)
+	return f'\nSalt Used: {salt} ->  \n\nHash: -> {hash}'

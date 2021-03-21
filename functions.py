@@ -7,8 +7,8 @@ import hashing
 username_db = input("Enter username:")
 password_db = getpass.getpass("Enter password: ")
 
-try:
-    db = msc.connect(host="localhost",database="pwdmanager",user=username_db,password=password_db)
+try:#pwdmanager
+    db = msc.connect(host="localhost",database="deep_pass",user=username_db,password=password_db)
     print("Database ready to use")
     mycursor = db.cursor()
 except msc.Error as e:
@@ -32,6 +32,7 @@ def insert_data():
     email = input("Email: ")
     password = input("Password: ")
     key=hashing.Hash(password).hashFunc() #need to fix the hashing function
+    print(key)
     website = input("Website: ")
     print("If you have entered the correct information please enter y, if you think there is a mistake please enter n")
     x = input()
