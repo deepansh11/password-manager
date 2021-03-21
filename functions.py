@@ -4,8 +4,8 @@ import sys
 from tabulate import tabulate
 import hashing
 
-username_db = "root" # input("Enter username:")
-password_db = "pahwadeepansh11" # getpass.getpass("Enter password: ")
+username_db = input("Enter username:")
+password_db = getpass.getpass("Enter password: ")
 
 try:
     db = msc.connect(host="localhost",database="pwdmanager",user=username_db,password=password_db)
