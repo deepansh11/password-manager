@@ -1,8 +1,11 @@
 import secrets
 from passlib.hash import argon2
 
-def hash_argon2(password):
-	salt = secrets.token_bytes(32)
-	hash = argon2.using(salt= salt, rounds=8, memory_cost=2048, parallelism=2, type='id', max_threads=16, relaxed=False).hash(password)
+salt = secrets.token_bytes(32)
 
-	return f'\nSalt Used: {salt} ->  \n\nHash: -> {hash}'
+def hashFunc(password):
+	hash = argon2.using(salt= salt, rounds=8, memory_cost=2048, parallelism=2, type='id', max_threads=16, relaxed=False).hash(password)
+	return hash
+
+def unhashFunc():
+	print("something")
