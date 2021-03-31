@@ -4,22 +4,22 @@ import sys
 from tabulate import tabulate
 import hashing
 import pyperclip
+import database_backup as backup
 
 data=['username','password','email']
 
 def connection():
-    password = getpass.getpass("Please enter the password to access the database: ")
     config = {
         "user": "root",
-        "password": password,
+        "password": "<enter your database password>",
         "host": "localhost",
         "database": "pwdmanager"
-    }
+    } #Please change your database values
     try:
         c = msc.connect(**config)
         return c
     except:
-        print("connection error")
+        print("connection error, make sure you have entered correct database values")
         exit(1)
 
 db = connection()
@@ -44,7 +44,6 @@ def insert_data():
     username = input("Username: ")
     email = input("Email: ")
     password = input("Password: ")
-    key=hashing.hashFunc(password)
     website = input("Website: ")
     print("If you have entered the correct information please enter y, if you think there is a mistake please enter n")
     x = input()
@@ -74,7 +73,19 @@ def reset_all_data():
     print(f"Data for {table_name} table deleted")
 
 def copy_to_clipboard():
-    print("This will copy password to clipboard and also unhash the existing password to copy")
+    try:
+        website = input("Please enter the website whose password you want to use: ")
+        mycursor.execute("SELECT password FROM manager WHERE website=%s",(website,))
+        password = mycursor.fetchone()
+        pyperclip.copy(password[0])
+    except Exception as e:
+        print(e)
+        exit(1)
 
-def backup_data(output_filename):
-    print("Create and encrypt a backup file")
+def write_file():
+    backup_file = open("backup.sql",'w+')
+    mycursor.execute("SELECT * FROM manager")
+    result = mycursor.fetchall()
+    table = tabulate(result, headers=['Email', 'Password','Website','Username'], tablefmt='psql')
+    for row in table:
+        backup_file.write(row)
